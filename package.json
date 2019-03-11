@@ -1,5 +1,5 @@
 {
-  "name": "subscriber",
+  "name": "4471-proj",
   "version": "1.0.0",
   "description": "",
   "main": "sub.js",
@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "redis": "^2.8.0"
+    "redis": "^2.8.0",
+    "request": "^2.88.0"
   }
 }
