@@ -14,9 +14,12 @@ var docRef = db.collection('services').doc('stocks');
 function fetchStocks(ref){
   return rp('https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=MSFT&apikey=demo')
     .then(res => {
-      ref.set(JSON.parse(res));
+      jsonRes = JSON.parse(res);
+      jsonRes.timestamp = Date.now();
+      console.log(`publishing fresh data at ${jsonRes.timestamp}`);
+      ref.set(jsonRes);
     })
     .catch(err => err);
 }
 
-setInterval(fetchStocks, 1000, ref);
+setInterval(fetchStocks, 1000, docRef);
