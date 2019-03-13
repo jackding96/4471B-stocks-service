@@ -11,12 +11,12 @@ admin.initializeApp({
 const db = admin.firestore();
 var docRef = db.collection('services').doc('stocks');
 
-function fetchStocks(){
+function fetchStocks(ref){
   return rp('https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=MSFT&apikey=demo')
     .then(res => {
-      docRef.set(JSON.parse(res));
+      ref.set(JSON.parse(res));
     })
     .catch(err => err);
 }
 
-setInterval(fetchStocks, 1000);
+setInterval(fetchStocks, 1000, ref);
