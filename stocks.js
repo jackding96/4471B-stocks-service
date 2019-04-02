@@ -1,3 +1,5 @@
+// api key = 5YUEPS6GZGGKOHUZ
+
 const rp = require('request-promise');
 
 var express = require('express')
@@ -33,4 +35,4 @@ app.get('/heartbeat', function (req, res) {
   res.sendStatus(200);
 })
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`))
+app.listen(port, () => console.log(`Stocks service running on port ${port}!`))
