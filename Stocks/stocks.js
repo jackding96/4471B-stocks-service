@@ -18,7 +18,7 @@ const db = admin.firestore();
 var docRef = db.collection('services').doc('stocks');
 
 function fetchStocks(ref){
-  return rp('https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=MSFT&apikey=demo')
+  return rp('https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=MSFT&apikey=5YUEPS6GZGGKOHUZ')
     .then(res => {
       jsonRes = JSON.parse(res);
       jsonRes.timestamp = Date.now();
