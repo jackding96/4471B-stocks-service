@@ -2,3 +2,5 @@
 applications:
   - name: 4471NewsService
     memory: 256M
+    env:
+      FETCH_INTERVAL_MS: 10000
