@@ -4,7 +4,9 @@ const rp = require('request-promise');
 
 var express = require('express')
 var app = express()
-const port = 3000
+
+const port = process.env.PORT || 3000;
+const fetchInterval = parseInt(process.env.FETCH_INTERVAL_MS, 10) || 1000;
 
 var admin = require("firebase-admin");
 var serviceAccount = require("./firebase-credentials.json");
@@ -28,7 +30,7 @@ function fetchStocks(ref){
     .catch(err => err);
 }
 
-setInterval(fetchStocks, 1000, docRef);
+setInterval(fetchStocks, fetchInterval, docRef);
 
 // respond with "hello world" when a GET request is made to the homepage
 app.get('/heartbeat', function (req, res) {
