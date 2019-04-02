@@ -1,0 +1,4 @@
+---
+applications:
+  - name: 4471NewsService
+    memory: 256M

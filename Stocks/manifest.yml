@@ -1,0 +1,4 @@
+---
+applications:
+  - name: 4471StocksService
+    memory: 256M

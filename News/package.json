@@ -1,0 +1,19 @@
+{
+  "name": "4471-proj",
+  "version": "1.0.0",
+  "description": "",
+  "main": "sub.js",
+  "scripts": {
+    "start": "node news.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.4",
+    "firebase-admin": "^7.0.0",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.4"
+  }
+}
