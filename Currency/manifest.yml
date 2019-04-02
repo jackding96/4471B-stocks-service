@@ -2,3 +2,5 @@
 applications:
   - name: 4471CurrencyService
     memory: 256M
+    env:
+      FETCH_INTERVAL_MS: 60000 # 1 min
