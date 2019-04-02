@@ -18,15 +18,34 @@ const db = admin.firestore();
 var docRef = db.collection('services').doc('stocks');
 
 function fetchData(ref){
-  return rp('https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=MSFT&apikey=5YUEPS6GZGGKOHUZ')
-    .then(res => {
-      jsonRes = JSON.parse(res);
-      jsonRes.timestamp = Date.now();
-      console.log(jsonRes);
-      console.log(`publishing fresh data at ${jsonRes.timestamp}`);
-      ref.set(jsonRes);
+  const stocks = ['FB', 'AMZN', 'AAPL', 'NFLX', 'GOOG'];
+
+  const promises = stocks.map(ticker => rp(`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${ticker}&apikey=5YUEPS6GZGGKOHUZ`));
+
+  Promise.all(promises)
+    .then(results => {
+      jsonResults = results.map(r => {
+        j = JSON.parse(r);
+        j.timestamp = Date.now();
+        return j;
+      });
+      if (!jsonResults[0].Note) {
+        ref.set(jsonResults);
+      }
+      console.log(jsonResults);
     })
     .catch(err => err);
+
+  // return rp('https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=MSFT&apikey=5YUEPS6GZGGKOHUZ')
+  //   .then(res => {
+  //     jsonRes = JSON.parse(res);
+  //     console.log(jsonRes.Note ? "limit" : jsonRes);
+  //     jsonRes.timestamp = Date.now();
+  //     // console.log(jsonRes);
+  //     // console.log(`publishing fresh data at ${jsonRes.timestamp}`);
+  //     // ref.set(jsonRes);
+  //   })
+  //   .catch(err => err);
 }
 
 setInterval(fetchData, fetchInterval, docRef);
