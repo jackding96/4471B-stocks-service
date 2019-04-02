@@ -1,5 +1,3 @@
-// api key = 5YUEPS6GZGGKOHUZ
-
 const rp = require('request-promise');
 
 var express = require('express')
@@ -19,8 +17,8 @@ admin.initializeApp({
 const db = admin.firestore();
 var docRef = db.collection('services').doc('currency');
 
-function fetchStocks(ref){
-  return rp('https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=MSFT&apikey=demo')
+function fetchData(ref){
+  return rp('https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency=USD&to_currency=JPY&apikey=5YUEPS6GZGGKOHUZ')
     .then(res => {
       jsonRes = JSON.parse(res);
       jsonRes.timestamp = Date.now();
@@ -30,9 +28,8 @@ function fetchStocks(ref){
     .catch(err => err);
 }
 
-setInterval(fetchStocks, fetchInterval, docRef);
+setInterval(fetchData, fetchInterval, docRef);
 
-// respond with "hello world" when a GET request is made to the homepage
 app.get('/heartbeat', function (req, res) {
   res.sendStatus(200);
 })

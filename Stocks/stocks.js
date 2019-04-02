@@ -1,5 +1,3 @@
-// api key = 5YUEPS6GZGGKOHUZ
-
 const rp = require('request-promise');
 
 var express = require('express')
@@ -19,7 +17,7 @@ admin.initializeApp({
 const db = admin.firestore();
 var docRef = db.collection('services').doc('stocks');
 
-function fetchStocks(ref){
+function fetchData(ref){
   return rp('https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=MSFT&apikey=5YUEPS6GZGGKOHUZ')
     .then(res => {
       jsonRes = JSON.parse(res);
@@ -31,9 +29,8 @@ function fetchStocks(ref){
     .catch(err => err);
 }
 
-setInterval(fetchStocks, fetchInterval, docRef);
+setInterval(fetchData, fetchInterval, docRef);
 
-// respond with "hello world" when a GET request is made to the homepage
 app.get('/heartbeat', function (req, res) {
   res.sendStatus(200);
 })
