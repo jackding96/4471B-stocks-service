@@ -19,7 +19,6 @@ var docRef = db.collection('services').doc('stocks');
 
 function fetchData(ref){
   const stocks = ['FB', 'AMZN', 'AAPL', 'NFLX', 'GOOG'];
-
   const promises = stocks.map(ticker => rp(`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${ticker}&apikey=5YUEPS6GZGGKOHUZ`));
 
   Promise.all(promises)
