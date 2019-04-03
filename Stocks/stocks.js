@@ -28,23 +28,13 @@ function fetchData(ref){
         j.timestamp = Date.now();
         return j;
       });
+      // Only writes to firebase if not a rate limit error message
       if (!jsonResults[0].Note) {
         ref.set(jsonResults);
       }
       console.log(jsonResults);
     })
     .catch(err => err);
-
-  // return rp('https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=MSFT&apikey=5YUEPS6GZGGKOHUZ')
-  //   .then(res => {
-  //     jsonRes = JSON.parse(res);
-  //     console.log(jsonRes.Note ? "limit" : jsonRes);
-  //     jsonRes.timestamp = Date.now();
-  //     // console.log(jsonRes);
-  //     // console.log(`publishing fresh data at ${jsonRes.timestamp}`);
-  //     // ref.set(jsonRes);
-  //   })
-  //   .catch(err => err);
 }
 
 setInterval(fetchData, fetchInterval, docRef);
