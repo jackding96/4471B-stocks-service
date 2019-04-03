@@ -18,12 +18,22 @@ const db = admin.firestore();
 var docRef = db.collection('services').doc('currency');
 
 function fetchData(ref){
-  return rp('https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency=USD&to_currency=JPY&apikey=5YUEPS6GZGGKOHUZ')
-    .then(res => {
-      jsonRes = JSON.parse(res);
-      jsonRes.timestamp = Date.now();
-      console.log(`publishing fresh data at ${jsonRes.timestamp}`);
-      ref.set(jsonRes);
+  const fromCurr = 'USD'
+  const toCurrs = ['BTC', 'CAD', 'CNY', 'EUR', 'DOGE'];
+  const promises = toCurrs.map(toCurr => rp(`https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency=${fromCurr}&to_currency=${toCurr}&apikey=5YUEPS6GZGGKOHUZ`));
+
+  Promise.all(promises)
+    .then(results => {
+      jsonResults = results.map(r => {
+        j = JSON.parse(r);
+        j.timestamp = Date.now();
+        return j;
+      });
+      // Only writes to firebase if not a rate limit error message
+      if (!jsonResults[0].Note) {
+        ref.set(jsonResults);
+      }
+      console.log(jsonResults);
     })
     .catch(err => err);
 }

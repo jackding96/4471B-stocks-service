@@ -31,7 +31,6 @@ function fetchData(ref){
 
 setInterval(fetchData, fetchInterval, docRef);
 
-// respond with "hello world" when a GET request is made to the homepage
 app.get('/heartbeat', function (req, res) {
   res.sendStatus(200);
 })
