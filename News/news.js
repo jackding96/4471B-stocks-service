@@ -17,14 +17,15 @@ admin.initializeApp({
 const db = admin.firestore();
 var docRef = db.collection('services').doc('news');
 
-function fetchData(ref){
+async function fetchData(ref){
   return rp('https://newsapi.org/v2/top-headlines?country=us&apiKey=d12785c03da84996b66ef94395e58547')
     .then(res => {
       jsonRes = JSON.parse(res);
-      console.log(jsonRes);
+      // console.log(jsonRes);
       jsonRes.timestamp = Date.now();
-      console.log(`publishing fresh data at ${jsonRes.timestamp}`);
+      // console.log(`publishing fresh data at ${jsonRes.timestamp}`);
       ref.set(jsonRes);
+      return jsonRes;
     })
     .catch(err => err);
 }
@@ -36,3 +37,5 @@ app.get('/heartbeat', function (req, res) {
 })
 
 app.listen(port, () => console.log(`News service running on port ${port}!`))
+
+module.exports = {fetchData};

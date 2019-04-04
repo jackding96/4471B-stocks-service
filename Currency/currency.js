@@ -17,14 +17,15 @@ admin.initializeApp({
 const db = admin.firestore();
 var docRef = db.collection('services').doc('currency');
 
-function fetchData(ref){
+async function fetchData(ref){
   return rp('https://api.exchangeratesapi.io/latest?base=USD&fbclid=IwAR0xDcwkl0tu2io99pyeQLsmyOLaX5b6FsZ9zRG4IZ-JP-0ThMEMWs3xKlk')
     .then(res => {
       jsonRes = JSON.parse(res);
-      console.log(jsonRes);
+      // console.log(jsonRes);
       jsonRes.timestamp = Date.now();
-      console.log(`publishing fresh data at ${jsonRes.timestamp}`);
+      // console.log(`publishing fresh data at ${jsonRes.timestamp}`);
       ref.set(jsonRes);
+      return jsonRes;
     })
     .catch(err => err);
 }
@@ -36,3 +37,7 @@ app.get('/heartbeat', function (req, res) {
 })
 
 app.listen(port, () => console.log(`Currency service running on port ${port}!`))
+
+module.exports = {
+  fetchData
+};

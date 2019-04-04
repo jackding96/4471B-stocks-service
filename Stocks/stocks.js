@@ -17,7 +17,7 @@ admin.initializeApp({
 const db = admin.firestore();
 var docRef = db.collection('services').doc('stocks');
 
-function fetchData(ref){
+async function fetchData(ref){
   const stocks = ['FB', 'AMZN', 'AAPL', 'NFLX', 'GOOG'];
   const promises = [];
 
@@ -25,7 +25,7 @@ function fetchData(ref){
     promises[i] = rp(`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${stocks[i]}&apikey=3SYO8XPS0TSLACNB`);
   }
 
-  Promise.all(promises)
+  return Promise.all(promises)
     .then(results => {
       jsonResults = results.map(r => {
         j = JSON.parse(r);
@@ -39,6 +39,7 @@ function fetchData(ref){
         });
         console.log(`publishing fresh data at ${Date.now()}`);
       } else { console.log('rate limited'); }
+      return ({'res': jsonResults});
     })
     .catch(err => err);
 }
@@ -50,3 +51,7 @@ app.get('/heartbeat', function (req, res) {
 })
 
 app.listen(port, () => console.log(`Stocks service running on port ${port}!`))
+
+module.exports = {
+  fetchData
+};
