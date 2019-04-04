@@ -4,7 +4,7 @@ var express = require('express')
 var app = express()
 
 const port = process.env.PORT || 3000;
-const fetchInterval = parseInt(process.env.FETCH_INTERVAL_MS, 10) || 1000;
+const fetchInterval = parseInt(process.env.FETCH_INTERVAL_MS, 10) || 60000;
 
 var admin = require("firebase-admin");
 var serviceAccount = require("./firebase-credentials.json");
@@ -19,7 +19,11 @@ var docRef = db.collection('services').doc('stocks');
 
 function fetchData(ref){
   const stocks = ['FB', 'AMZN', 'AAPL', 'NFLX', 'GOOG'];
-  const promises = stocks.map(ticker => rp(`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${ticker}&apikey=5YUEPS6GZGGKOHUZ`));
+  const promises = [];
+
+  for (let i = 0; i < stocks.length; i++) {
+    promises[i] = rp(`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${stocks[i]}&apikey=3SYO8XPS0TSLACNB`);
+  }
 
   Promise.all(promises)
     .then(results => {
@@ -27,12 +31,14 @@ function fetchData(ref){
         j = JSON.parse(r);
         j.timestamp = Date.now();
         return j;
-      });
+      })
       // Only writes to firebase if not a rate limit error message
       if (!jsonResults[0].Note) {
-        ref.set(jsonResults);
-      }
-      console.log(jsonResults);
+        ref.set({
+          'res': jsonResults
+        });
+        console.log(`publishing fresh data at ${Date.now()}`);
+      } else { console.log('rate limited'); }
     })
     .catch(err => err);
 }
